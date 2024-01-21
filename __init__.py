@@ -11,7 +11,7 @@ bl_info = {
     "author": "Kent Edoloverio",
     "description": "Import images as stickeR",
     "blender": (4, 0, 2),
-    "version": (0, 9, 5),
+    "version": (1, 0, 0),
     "location": "3D View > KLicense",
     "warning": "",
     "category": "3D View",
