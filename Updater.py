@@ -8,7 +8,7 @@ import requests
 import shutil
 import bpy
 
-bl_info = {"version": (0, 9, 5)}
+bl_info = {"version": (1, 0, 0)}
 
 
 class GithubEngine:
