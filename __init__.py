@@ -1,14 +1,14 @@
 import os
 import bpy
-from .Updater import engine
 from .Updater_OP import *
-from bpy.props import StringProperty, EnumProperty, CollectionProperty
+from .Updater import engine
 from bpy_extras.io_utils import ImportHelper
 from bpy.types import AddonPreferences, Operator, Panel
+from bpy.props import StringProperty, EnumProperty, CollectionProperty
 
 bl_info = {
     "name": "StickR",
-    "author": "KentEdoloverio",
+    "author": "Kent Edoloverio",
     "description": "Import images as stickeR",
     "blender": (4, 0, 2),
     "version": (0, 9, 5),
@@ -24,23 +24,24 @@ addon_keymaps = []
 
 
 def preferences():
-    return bpy.context.preferences.addons[__package__].preferences
+    return bpy.context.preferences.addons[__name__].preferences
 
 
 def add_to_image_menu(self, context):
     layout = self.layout
     layout.operator("rtools.importasStickR", icon='OUTLINER_OB_IMAGE')
 
-
 class StickRAddonPreference(AddonPreferences):
-    bl_idname = __package__
+    bl_idname = __name__
+
     directory_path: StringProperty(
-        default="Choose Path", name="Directory", subtype='DIR_PATH')
+        default="Choose Path",
+        name="Directory",
+        subtype='DIR_PATH')
 
     def draw(self, context):
         layout = self.layout
         layout.prop(self, 'directory_path')
-
         box = layout.box()
         row = box.row()
         row.scale_y = 2
@@ -60,7 +61,8 @@ class StickRAddonPreference(AddonPreferences):
                 version_info = json.load(json_file)
                 engine._update_date = version_info.get("update_date")
                 engine._latest_version = version_info.get("latest_version")
-                engine._current_version = version_info.get("current_version")
+                engine._current_version = version_info.get(
+                    "current_version")
 
                 if engine._latest_version is not None:
                     row = box.row()
@@ -82,6 +84,7 @@ class StickRAddonPreference(AddonPreferences):
             row.label(text="Error loading version information.")
 
 
+
 def get_preview_items(self, context):
     enum_items = []
     name = self.name
@@ -101,7 +104,6 @@ def get_preview_items(self, context):
         pcoll.my_previews = enum_items
         return pcoll.my_previews
     return []
-
 
 class StickRLoadPreviews(Operator):
     bl_idname = 'stickr.refresh'
@@ -187,11 +189,13 @@ class StickRPanel(Panel):
                 self.draw_material_settings(
                     layout, mat.node_tree.nodes['StickR Shader'].inputs)
 
+
     def draw_material_settings(self, layout, inputs):
         layout.prop(inputs[2], 'default_value', text="Scale")
         layout.prop(inputs[3], 'default_value', text="Worn Strength")
         layout.prop(inputs[11], 'default_value', text="Scratches")
-        layout.prop(inputs[16], 'default_value', text="Scratches Strength")
+        layout.prop(inputs[16], 'default_value',
+                    text="Scratches Strength")
 
         row = layout.column(align=True)
         row.label(text="Offset:")
@@ -201,14 +205,15 @@ class StickRPanel(Panel):
         layout.prop(inputs[5], 'default_value', text="Roughness")
         layout.prop(inputs[6], 'default_value', text="Edge")
         layout.prop(inputs[7], 'default_value', text="Damage Hue")
-        layout.prop(inputs[8], 'default_value', text="Damage Saturation")
-        layout.prop(inputs[9], 'default_value', text="Damage Brightness")
+        layout.prop(inputs[8], 'default_value',
+                    text="Damage Saturation")
+        layout.prop(inputs[9], 'default_value',
+                    text="Damage Brightness")
         layout.prop(inputs[10], 'default_value', text="Bump Strength")
         layout.prop(inputs[12], 'default_value', text="Rotation")
         layout.prop(inputs[13], 'default_value', text="Distortion")
         layout.prop(inputs[14], 'default_value', text="Scale")
         layout.prop(inputs[15], 'default_value', text="Thickness")
-
 
 
 class StickRImportEnum(bpy.types.Operator):
@@ -376,6 +381,7 @@ classes = (
     Release_Notes,
     Update,
     Check_for_update,
+    KlicenseValidator,
 )
 
 
@@ -384,6 +390,10 @@ def register():
     engine.user = "kents00"  # Replace this with your username
     engine.repo = "StickR"  # Replace this with your repository name
     engine.token = None  # Set your GitHub token here if necessary
+
+    license_preference.product_id = "p9lldzuRwpy8UtRVVA5T3A=="
+    license_preference.website = "https://www.gumroad.com"
+    license_preference.validator = Gumroad()
 
     for cls in classes:
         bpy.utils.register_class(cls)
@@ -425,6 +435,9 @@ def unregister():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
     preview_list.clear()
+
+    instance = license_preference()
+    instance.clear_state()
 
 
 if __name__ == "__main__":
