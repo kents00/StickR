@@ -68,11 +68,15 @@ class StickRAddonPreference(AddonPreferences):
                 if engine._latest_version is not None:
                     row = box.row()
                     row.label(
-                        text=f"Version: {engine._latest_version}")
+                        text=f"Version: {version_info['current_version']}")
+                elif engine._current_version != engine._latest_version:
+                    row = box.row()
+                    row.label(
+                        text=f"New version: {version_info['latest_version']}")
                 elif engine._current_version == engine._latest_version:
                     row = box.row()
                     row.label(
-                        text=f"You are using the latest version: {engine._latest_version}")
+                        text=f"You are using the latest version: {version_info['current_version']}")
                 if engine._update_date is not None:
                     row = box.row()
                     row.label(text=f"Last update: {engine._update_date}")
