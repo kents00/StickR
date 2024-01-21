@@ -147,9 +147,17 @@ class GithubEngine:
                 destination_item_path = os.path.join(destination_folder, item)
 
                 if os.path.isfile(source_item_path):
-                    shutil.copy2(source_item_path, destination_item_path)
+                    if not os.path.exists(destination_item_path):
+                        shutil.copy2(source_item_path, destination_item_path)
+                    else:
+                        print(f"File {item} already exists at the destination. Skipping.")
                 elif os.path.isdir(source_item_path):
-                    shutil.copytree(source_item_path, destination_item_path)
+                    if not os.path.exists(destination_item_path):
+                        shutil.copytree(source_item_path,
+                                        destination_item_path)
+                    else:
+                        print(
+                            f"Directory {item} already exists at the destination. Skipping.")
             print("Contents extracted to base path.")
         else:
             print("Target folder not found.")
