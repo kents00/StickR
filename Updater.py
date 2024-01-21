@@ -8,10 +8,7 @@ import requests
 import shutil
 import bpy
 
-try:
-    from . import __init__ as addon
-except:
-    import __init__ as addon
+bl_info = {"version": (0, 9, 5)}
 
 
 class GithubEngine:
@@ -180,7 +177,7 @@ class GithubEngine:
         data = json.loads(response.text)
         date = datetime.datetime.now()
         latest_version = data["tag_name"]
-        current_version = f"{addon.bl_info['version'][0]}.{addon.bl_info['version'][1]}.{addon.bl_info['version'][2]}"
+        current_version = f"{bl_info['version'][0]}.{bl_info['version'][1]}.{bl_info['version'][2]}"
 
         addon_version = {
             "current_version": current_version,

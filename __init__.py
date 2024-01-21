@@ -11,7 +11,7 @@ bl_info = {
     "author": "Kent Edoloverio",
     "description": "Import images as stickeR",
     "blender": (4, 0, 2),
-    "version": (1, 0, 0),
+    "version": (0, 9, 5),
     "location": "3D View > KLicense",
     "warning": "",
     "category": "3D View",
@@ -30,6 +30,7 @@ def preferences():
 def add_to_image_menu(self, context):
     layout = self.layout
     layout.operator("rtools.importasStickR", icon='OUTLINER_OB_IMAGE')
+
 
 class StickRAddonPreference(AddonPreferences):
     bl_idname = __name__
@@ -84,7 +85,6 @@ class StickRAddonPreference(AddonPreferences):
             row.label(text="Error loading version information.")
 
 
-
 def get_preview_items(self, context):
     enum_items = []
     name = self.name
@@ -104,6 +104,7 @@ def get_preview_items(self, context):
         pcoll.my_previews = enum_items
         return pcoll.my_previews
     return []
+
 
 class StickRLoadPreviews(Operator):
     bl_idname = 'stickr.refresh'
@@ -188,7 +189,6 @@ class StickRPanel(Panel):
             if mat and "StickR Shader" in [a.name for a in mat.node_tree.nodes]:
                 self.draw_material_settings(
                     layout, mat.node_tree.nodes['StickR Shader'].inputs)
-
 
     def draw_material_settings(self, layout, inputs):
         layout.prop(inputs[2], 'default_value', text="Scale")
@@ -381,7 +381,6 @@ classes = (
     Release_Notes,
     Update,
     Check_for_update,
-    KlicenseValidator,
 )
 
 
@@ -390,10 +389,6 @@ def register():
     engine.user = "kents00"  # Replace this with your username
     engine.repo = "StickR"  # Replace this with your repository name
     engine.token = None  # Set your GitHub token here if necessary
-
-    license_preference.product_id = "p9lldzuRwpy8UtRVVA5T3A=="
-    license_preference.website = "https://www.gumroad.com"
-    license_preference.validator = Gumroad()
 
     for cls in classes:
         bpy.utils.register_class(cls)
@@ -420,7 +415,7 @@ def register():
     bpy.types.VIEW3D_MT_image_add.append(add_to_image_menu)
     bpy.types.Scene.stickr = CollectionProperty(type=StickRInfo)
     bpy.types.Scene.stickr_directories = EnumProperty(
-        items=stickr_directories, name = "")
+        items=stickr_directories, name="")
 
 
 def unregister():
@@ -435,9 +430,6 @@ def unregister():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
     preview_list.clear()
-
-    instance = license_preference()
-    instance.clear_state()
 
 
 if __name__ == "__main__":

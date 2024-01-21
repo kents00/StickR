@@ -4,8 +4,15 @@ import json
 import webbrowser
 from .Updater import engine
 
+json_path = os.path.join(os.path.dirname(__file__), "version_info.json")
+
+with open(json_path, 'r') as json_file:
+    data = json.load(json_file)
+
 # The `Release_Notes` class is an operator in Blender that opens the release notes of an addon in a
 # web browser.
+
+
 class Release_Notes(bpy.types.Operator):
     bl_label = "View the Release Notes"
     bl_idname = "addonupdater.release_notes"
@@ -32,7 +39,7 @@ class Update(bpy.types.Operator):
             self.report({'ERROR'}, "Error getting update")
             return {'CANCELLED'}
 
-        if engine._current_version == engine._latest_version:
+        if data['current_version'] == data['latest_version']:  # I want this to change
             self.report(
                 {'ERROR'}, "You are already using the latest version of the add-on.")
             return {'CANCELLED'}
@@ -58,9 +65,9 @@ class Check_for_update(bpy.types.Operator):
             self.report(
                 {'ERROR'}, "GitHub user and repository details are not set.")
             return {'CANCELLED'}
-        if engine._current_version != engine._latest_version:
+        if data['current_version'] != data['latest_version']:  # I want this to change also
             self.report({'INFO'}, "A new version is available!")
-        elif engine._current_version == engine._latest_version:
+        elif data['current_version'] == data['latest_version']:  # And also this
             self.report(
                 {'INFO'}, "You are already using the latest version of the add-on.")
         return {'FINISHED'}
