@@ -1,5 +1,7 @@
 import os
 import bpy
+from .Updater import engine
+from .Updater_OP import *
 from bpy.props import StringProperty, EnumProperty, CollectionProperty
 from bpy_extras.io_utils import ImportHelper
 from bpy.types import AddonPreferences, Operator, Panel
@@ -9,7 +11,7 @@ bl_info = {
     "author": "KentEdoloverio",
     "description": "Import images as stickeR",
     "blender": (4, 0, 2),
-    "version": (2, 1, 0),
+    "version": (0, 9, 5),
     "location": "3D View > KLicense",
     "warning": "",
     "category": "3D View",
@@ -38,6 +40,46 @@ class StickRAddonPreference(AddonPreferences):
     def draw(self, context):
         layout = self.layout
         layout.prop(self, 'directory_path')
+
+        box = layout.box()
+        row = box.row()
+        row.scale_y = 2
+        row.operator("addonupdater.release_notes", icon="HELP")
+        row = box.row()
+        row.scale_y = 2
+        row.operator(Check_for_update.bl_idname, icon="TRIA_DOWN_BAR")
+        row.scale_y = 2
+        row.alert = True
+        row.operator(Update.bl_idname, icon="FILE_REFRESH")
+
+        json_file_path = os.path.join(
+            os.path.dirname(__file__), "version_info.json")
+
+        try:
+            with open(json_file_path, 'r') as json_file:
+                version_info = json.load(json_file)
+                engine._update_date = version_info.get("update_date")
+                engine._latest_version = version_info.get("latest_version")
+                engine._current_version = version_info.get("current_version")
+
+                if engine._latest_version is not None:
+                    row = box.row()
+                    row.label(
+                        text=f"Version: {engine._latest_version}")
+                elif engine._current_version == engine._latest_version:
+                    row = box.row()
+                    row.label(
+                        text=f"You are using the latest version: {engine._latest_version}")
+                if engine._update_date is not None:
+                    row = box.row()
+                    row.label(text=f"Last update: {engine._update_date}")
+        except json.decoder.JSONDecodeError as e:
+            print(f"Error loading JSON file: {e}")
+            row = box.row()
+            row.label(text="Last update: Never")
+        except FileNotFoundError:
+            row = box.row()
+            row.label(text="Error loading version information.")
 
 
 def get_preview_items(self, context):
@@ -331,10 +373,18 @@ classes = (
     StickRPanel,
     StickRImportEnum,
     StickRImportImage,
+    Release_Notes,
+    Update,
+    Check_for_update,
 )
 
 
 def register():
+
+    engine.user = "kents00"  # Replace this with your username
+    engine.repo = "StickR"  # Replace this with your repository name
+    engine.token = None  # Set your GitHub token here if necessary
+
     for cls in classes:
         bpy.utils.register_class(cls)
 
