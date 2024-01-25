@@ -360,7 +360,7 @@ class StickRImportImage(bpy.types.Operator, ImportHelper):
             shrink_mod = plane.modifiers.new(
                 type="SHRINKWRAP", name="Shrinkwrap")
             shrink_mod.target = active_object
-            shrink_mod.offset = 0.003
+            shrink_mod.offset = 0.013
             shrink_mod.wrap_method = 'PROJECT'
             shrink_mod.use_project_z = True
             shrink_mod.use_negative_direction = True
