@@ -1,5 +1,12 @@
 # StickR
 
+This addon aims to seamlessly convert images into stickers that are specifically tailored for easy application on a 3D model. The process involves meticulously transforming the images and optimizing them with precision to ensure their perfect integration as high-quality stickers on the model.
+
+![25 01 2024_23 36 09_REC](https://github.com/kents00/StickR/assets/69900896/590cac02-bbf3-4ac9-b02b-c189d1e1c860)
+
+![Blender](https://img.shields.io/badge/blender|4.0.2-EA7600.svg?style=for-the-badge&logo=blender&logoColor=white)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q8BW198)
+
 ### Installation
 
 To install this add-on in Blender, follow these steps:
