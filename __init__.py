@@ -29,7 +29,7 @@ def preferences():
 
 def add_to_image_menu(self, context):
     layout = self.layout
-    layout.operator("rtools.importasStickR", icon='OUTLINER_OB_IMAGE')
+    layout.operator("stickr.importenum", icon='OUTLINER_OB_IMAGE')
 
 
 class StickRAddonPreference(AddonPreferences):
@@ -60,10 +60,6 @@ class StickRAddonPreference(AddonPreferences):
         try:
             with open(json_file_path, 'r') as json_file:
                 version_info = json.load(json_file)
-                engine._update_date = version_info.get("update_date")
-                engine._latest_version = version_info.get("latest_version")
-                engine._current_version = version_info.get(
-                    "current_version")
 
                 if engine._latest_version is not None:
                     row = box.row()

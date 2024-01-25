@@ -38,7 +38,7 @@ class Update(bpy.types.Operator):
             self.report({'ERROR'}, "Error getting update")
             return {'CANCELLED'}
 
-        if data['current_version'] == data['latest_version']:  # I want this to change
+        if engine._current_version == engine._latest_version:
             self.report(
                 {'ERROR'}, "You are already using the latest version of the add-on.")
             return {'CANCELLED'}
@@ -64,9 +64,9 @@ class Check_for_update(bpy.types.Operator):
             self.report(
                 {'ERROR'}, "GitHub user and repository details are not set.")
             return {'CANCELLED'}
-        if data['current_version'] != data['latest_version']:  # I want this to change also
+        if engine._current_version != engine._latest_version:
             self.report({'INFO'}, "A new version is available!")
-        elif data['current_version'] == data['latest_version']:  # And also this
+        elif engine._current_version == engine._latest_version:
             self.report(
                 {'INFO'}, "You are already using the latest version of the add-on.")
         return {'FINISHED'}

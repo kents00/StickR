@@ -150,7 +150,8 @@ class GithubEngine:
                     if not os.path.exists(destination_item_path):
                         shutil.copy2(source_item_path, destination_item_path)
                     else:
-                        print(f"File {item} already exists at the destination. Skipping.")
+                        print(
+                            f"File {item} already exists at the destination. Skipping.")
                 elif os.path.isdir(source_item_path):
                     if not os.path.exists(destination_item_path):
                         shutil.copytree(source_item_path,
@@ -199,9 +200,8 @@ class GithubEngine:
         except zipfile.BadZipFile as e:
             print("Error extracting zip file:", e)
             return None
-        if self._latest_version != self._current_version:
-            return self._latest_version
-        return self._current_version, self._update_date
+
+        return self._current_version, self._update_date, self._latest_version
 
     @bpy.app.handlers.persistent
     def update(self):
